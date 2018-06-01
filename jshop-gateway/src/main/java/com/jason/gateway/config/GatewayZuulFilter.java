@@ -2,7 +2,12 @@ package com.jason.gateway.config;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,7 +18,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Component
 public class GatewayZuulFilter extends ZuulFilter {
-
+    @Autowired
+    public RestTemplate restTemplate;
     /**
      * per：路由之前
      * routing：路由时
@@ -54,6 +60,8 @@ public class GatewayZuulFilter extends ZuulFilter {
             ctx.setResponseStatusCode(404);
             ctx.setResponseBody("token cannot be empty");
         }
+
+        restTemplate.postForEntity("http://localhost:8081/authentication/authCheck",token,String.class);
         return null;
     }
 }
