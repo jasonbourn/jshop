@@ -13,6 +13,7 @@ import java.util.List;
  * @author qiang on 2018/05/31.
  */
 @RestController
+@RequestMapping("jshop/order")
 public class TestController {
     @Autowired
     private TestService testService;

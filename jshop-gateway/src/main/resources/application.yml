@@ -1,0 +1,34 @@
+server:
+  port: 8090
+eureka:
+  instance:
+    appname: gateway-service
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+order-service:
+  ribbon:
+    NIWSServerListClassName: com.netflix.loadbalancer.ConfigurationBasedServerList
+    listOfServers: http://localhost:8080
+    ConnectTimeout: 1000
+    ReadTimeout: 3000
+    MaxTotalHttpConnections: 500
+    MaxConnectionsPerHost: 100
+
+zuul:
+  host:
+    socket-timeout-millis: 60000
+    connect-timeout-millis: 60000
+  routes:
+    order-service:
+      path: /jshop/order/**
+      serviceId: order-service
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
